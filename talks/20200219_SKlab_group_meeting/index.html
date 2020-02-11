@@ -1,0 +1,277 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Feb 19, 2020 - Group Meeting</title>
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="custom.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+<!-- Title Slide -->
+<section id="title-slide" data-background=url(assets/seg.png)
+data-transition="slide">
+
+<div style="display: flex;">
+<div style="flex: 0 0 50%; border-right: 0.1em solid #FFFFFF; ">
+<h1 class="title">The Energetics of Molecular Adaptation</h1>
+<p class="author" style="padding-left: 2%; font-size: 1.5em; padding-top: 0%;">
+Griffin Chure</p>
+<br/>
+<p class="date"> February 19, 2020 - SK Lab Group Meeting</p>
+</div>
+
+<div style="flex: 1; padding-left: 5%; padding-top: 2%;">
+<p class="author"> </p>
+</div>
+
+</section>
+
+
+<!-- Life is stressful -->
+<section>
+<h1> Life is stressful</h1>
+
+<!-- Positioning of images -->
+    <div style="position: absolute; top:50%; left: 15%; width:70%;">
+        <img  class="plain" style="width: 100%;" src="assets/signal_processing_without_inset.svg"> 
+    </div>
+
+    <div class="fragment" style="position: absolute; top:50%; left: 15%; width:70%;">
+        <img class="plain" style="width: 100%;" src="assets/signal_processing_with_inset.svg"> 
+    </div>
+
+    <div class="fragment" style="position:absolute; top:350%; width:100%;">
+        <p style="text-align: left;"> Cells draw inferences from measurements
+          of their environment and <b>adapt</b> in response.</p>
+        <p class="fragment" style="text-align: right"> Adaptation occurs across
+        <b>time and space</b>, all sculpted by the forces of evolution</p> 
+    </div>
+</section>
+
+
+<!-- Adaptation traverses the biological scales -->
+<section>
+    <h1> Adaptation traverses the biological scales </h1>
+    <img class="plain"  style="width: 100%" src="assets/adaptation_levels.svg">
+
+        <!-- Hides Molecular Adaptation-->
+       <div class="fragment fade-out" style="position: absolute; top:24%; 
+       width:100%; background-color: #fff; height: 20%;">
+       </div>
+
+        <!-- Hides Physiological Adaptation-->
+       <div class="fragment fade-out" style="position: absolute; top:43%; 
+       width:100%; background-color: #fff; height: 27.5%;">
+       </div>
+
+        <!-- Hides Evolutionary Adaptation-->
+       <div class="fragment fade-out" style="position: absolute; top:70.5%; 
+       width:100%; background-color: #fff; height: 27.5%;">
+       </div>
+</section>
+
+
+<!-- Molecular Interactions -->
+<section>
+    <h1>Transcriptional regulation is inherently adaptive</h1>
+
+    <!-- Monod Div -->
+    <div style="width: 50%; position: absolute; left: -1%; top: 55%;">
+        <img class="plain" style="width: 100%; padding: 0%; 
+                    border: 0.05em solid #3c3c3c;" src="assets/monod.gif">
+    <h5 style="position: absolute">Monod 1965 <i>GROWTH</i> </h5>
+    </div>
+
+    <!-- Molecular -->
+    <div style="width: 50%; position: absolute; right: 0%; bottom: 0%; top: 65%;">
+    <div class="fragment", style="clear: both;">
+        <img class="plain" style="width: 45%; float: right; position: relative;
+        bottom: 0%;"
+        src="assets/lac.png">
+        <h2 style="boder-bottom: 0.5em solid #3c3c3c; text-align: left; padding: 0%;"> Molecular </h2><br/>
+        <p>Regulatory molecule binds to environmental signal, switching from
+        one state to another.</p>
+    </div>
+    <br/>
+
+    <!-- Physiological -->
+     <div class="fragment" style="clear: both;">
+        <img class="plain" style="width: 40%; float: right; position: relative;
+        bottom: 0%;"
+        src="assets/network.png">
+        <h2 style="boder-bottom: 0.5em solid #3c3c3c; text-align: left; padding:
+        0%;"> Physiological </h2><br/>
+        <p>Regulatory molecule triggers rewiring of metabolic pathways,
+        shifting resource utilization from one source to another</p>
+    </div>
+   <br/>
+     <!-- Evolutionary -->
+     <div class="fragment" style="clear: both;">
+        <img class="plain" style="width: 45%; float: right;"
+        src="assets/alignment.png">
+        <h2 style="boder-bottom: 0.5em solid #3c3c3c; text-align: left; padding:
+        0%;"> Evolutionary </h2><br/>
+        <p>Sequence of the regulatory molecule across organisms has conserved and variable regions, sculpted by forces of evolution.</p>
+    </div>
+    </div>
+
+    <!-- Questions For next step-->
+</section>
+
+
+<!-- intro to simple repression -->
+<section>
+<h1> The "hydrogen atom" of transcriptional regulation</h1>
+<div style="width: 70%; position: absolute; left: 15%;">
+<img class="plain" style="width: 100%" src="assets/hydrogen_atom_wo_approx.png">
+</div>
+<div class="fragment" style="width: 71.65%;  position: absolute; left: 15%; ">
+<img class="plain" style="width: 100%;" src="assets/hydrogen_atom_w_approx_wo_fc.png">
+</div>
+<div class="fragment" style="width: 71.65%;  position: absolute; left: 15%; ">
+<img class="plain" style="width: 100%;" src="assets/hydrogen_atom_w_approx_w_fc.png">
+</div>
+</section>
+
+<!-- states and weights-->
+<section>
+<h1>Mathematizing the cartoons with statistical mechanics </h1>
+<div style="width:75%; position: absolute; top:25%; left: 10%;">
+<img class='plain' style="width: 100%" src="assets/simple_rep_diagram.png">
+</div>
+<div class="fragment" style="width: 90%; position: absolute; top: 150%; left: 5%;">
+<img class="plain" style="width:100%;" src="assets/states_weights.png">
+<h5>Adapted from Razo-Mejia. <i> et al.</i> Cell Systems (2018).  doi.org/c746</h5>
+
+</div>
+<div class="fragment fade-out" style="width: 55%; background-color: #ffffff; height: 290%; 
+            position:absolute; top: 150%; left: 40.5%;">
+</div>
+</section>
+
+<!-- fold-change diagram -->
+<section>
+<h1> A succinct input-output function for simple repression</h1>
+<img src="assets/schematized_foldchange.png">
+<h5>Razo-Mejia. <i> et al.</i> Cell Systems (2018).  doi.org/c746</h5>
+</section>
+
+<!-- Induction Plot Slide -->
+<section>
+<h1> From one, many </h1>
+<div style="position: absolute; width: 100%">
+<img class="plain" style="width:100%" src="assets/induction_fitstrain.png">
+<h5>Adapted from Razo-Mejia. <i> et al.</i> Cell Systems (2018).  doi.org/c746</h5>    
+</div>
+<div class='fragment' style="position: absolute; width: 100%">
+<img class="plain" style="width:100%" src="assets/induction_allstrain.png">
+<br/><br/>
+<span class="fragment"><p style="text-align: left;"> There are many different
+regimes which yield <b>the same fold-change</b>.</p></span>
+<br/>
+<span class="fragment"><p style="width: 70%; margin-left: 30%; text-align: right;"> Can the <b>dimensionality be
+reduced</b>, yet still describe the diverse phenomenology?</b></p></span>
+</div>
+</section>
+
+<!-- Introducing collapse -->
+<section>
+<h1>Further coarse-graining to a two-state model </h1>
+
+<!-- states/weights figure -->
+<div style="width: 65%; position: absolute; top: 50%; left: 17.5%;">
+<img class="plain" style="width: 100" src="assets/coarse_grained.png">
+</div>
+
+<!-- Fragment hiding coarse graining-->
+<div class="fragment fade-out" style="width: 40%; height: 270%; position: absolute; top: 60%; left: 50%;
+            background-color: #FFFFFF;">
+</div>
+
+<!-- Fragment showing derivation to bohr -->
+<div  class="fragment" style="width: 80%; position: absolute; top: 350%; left: 10%;">
+<img class="plain" style="width: 100%;" src="assets/bohr_derivation.png">
+</div>
+</section>
+
+<!-- Interactive showing how Bohr works -->
+<section>
+<h1> The fold-change is scaled by the effective free energy</h1>
+<!-- diagrammed equation -->
+<div style="position: absolute; top: 70%; width: 60%; left: 15%;">
+<img style="width: 100%" src="assets/bohr_labeled.svg">
+</div>
+
+<!-- Interactive Figure -->
+<span class="fragment">
+<div class="fig-container" style="width: 70%; position: absolute; top: 205%;
+left: 12.5%;"
+data-file="assets/bohr_explorer.html">
+</div>
+</span>
+</section>
+
+
+
+<!-- Showing the data collapse -->
+<section>
+<h1> From many, one </h1>
+<div style="position: absolute; left: 10%; top: 65%; width:90%;">
+<img style="width: 100%;"src="assets/induction_allstrain.svg">
+</div>
+<div class="fragment" style="position: absolute; left: 25%; top: 250%; width: 50%;">
+<img style="width: 100%;" src="assets/data_collapse.svg">
+</div>
+</section>
+
+
+				<section><h1>Slide 1</h1></section>
+				<section>Slide 2 AHHHH</section>
+			</div>
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				hash: true,
+                width: 900,
+                height: 900,
+                margin: 0.01,
+                minScale: 0.5,
+                maxScale: 2,
+                controls: false,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/highlight/highlight.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+                    {src: 'plugin/math/math.js', async: true},
+        			{src: 'plugin/reveald3/reveald3.js'}
+				]
+			})
+            		Reveal.configure({transition: "none"});
+		</script>
+	</body>
+</html>
