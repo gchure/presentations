@@ -14,8 +14,7 @@
 
 @font-face {
   font-family: Myriad Pro;
-  src: url("fonts/Myriad Pro Regular.ttf") ;
-  format("truetype");
+  src: url("lib/fonts/myriad-pro");
 }
 
 
@@ -75,7 +74,7 @@
     font-family: "Crimson Pro";
     color: #8c8c8c;
     font-size:0.8em;
-    font-weigh: 200i;
+    font-weight: 200i;
     font-style: italic;
     text-align: left;
     padding: 0%;

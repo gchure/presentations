@@ -47,7 +47,7 @@ edge_colors = {22: colors['dark_red'],
               260: colors['dark_orange'], 
               1220: colors['dark_purple'], 
               1740: colors['dark_blue']}
-base = alt.Chart(summary, width=300, height=150)
+base = alt.Chart(summary, width=300, height=250)
 
 errors = base.mark_errorbar().encode(
         x = 'bohr:Q',
