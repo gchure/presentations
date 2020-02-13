@@ -13,7 +13,7 @@ from bokeh.models.widgets import Select, Slider, RadioButtonGroup, Button
 from bokeh.embed import components
 phd.viz.bokeh_theme()
 colors, palette = phd.viz.phd_style()
-bokeh.plotting.output_file("../assets/bohr_explorer.html")
+bokeh.plotting.output_file("../figs/bohr_explorer.html", mode='inline')
 
 # Define the various sliders. 
 rep_slider = Slider(title='repressors per cell', start=0, end=1000, step=10, 
@@ -112,32 +112,40 @@ master_curve = (1 + np.exp(-bohr_range))**-1
 
 
 # Set up the figure canvases. 
-p_fc = bokeh.plotting.figure(width=300, height=300,
+p_fc = bokeh.plotting.figure(width=400, height=300,
                             x_axis_label='log\u2081\u2080(c/ Ki)',
                             y_axis_label='fold-change',
                             y_range=[-0.05, 1.1],
                             title='phenotypic output')
-p_bohr = bokeh.plotting.figure(width=300,
+p_bohr = bokeh.plotting.figure(width=400,
                             height=300, x_axis_label='free energy [kT]',
                             y_axis_label='fold-change',
                             title='energetic representation')
 
-# Set the correct font sizes. 
-for p in [p_fc, p_bohr]:
-    p.axis.axis_label_text_font_size = "1.5em"
-    p.title.text_font_size = "1.5em"
-    p.axis.major_label_text_font_size = "1em"
 
 p_fc.line(x='c_ki', y='fc', source=source, line_width = 2, color=colors['light_purple'])
-p_fc.circle(x='c_ki', y='fc', source=point_source, line_width=2, color=colors['light_purple'], size=8)
+p_fc.circle(x='c_ki', y='fc', source=point_source, line_width=2, 
+                color='white', line_color=colors['light_purple'], size=10)
 
 p_bohr.line(x=bohr_range, y=master_curve, color=colors['black'], line_width=2)
-p_bohr.circle(x='bohr', y='fc', source=point_source, line_width=2, color=colors['purple'], size=8)
+p_bohr.circle(x='bohr', y='fc', source=point_source, line_width=2, 
+        color='white', line_color=colors['light_purple'], size=10)
 
 # Set up the widget box and layout. 
-box = widgetbox(rep_slider, ep_slider, c_slider)
-plot_row= bokeh.layouts.row(p_fc, p_bohr, sizing_mode='scale_width')
-slider_row = bokeh.layouts.row(c_slider, rep_slider, ep_slider, sizing_mode='scale_width')
-lay = bokeh.layouts.column(slider_row, plot_row, sizing_mode='scale_width')
+div1= Div(text="""
+<h1 style="font-family:NanumMyeongjo; font-size: 2.5em; 
+        border-bottom: 1px solid #3c3c3c; width:100%;"> The fold-change is scaled by the free energy of the promoter </h1><br/>
+""")
+
+div2 = Div(text="""
+<center>
+<img src="bohr_labeled.png" style="margin-left: 20%;width: 600px; padding-bottom: 30%;">
+</center>
+
+""", sizing_mode="scale_width")
+box = widgetbox(rep_slider, ep_slider, c_slider, width=200)
+row1 = bokeh.layouts.row(p_fc, p_bohr) 
+plot_row = bokeh.layouts.row(box, row1)
+lay = bokeh.layouts.column(div1, div2,  plot_row)
 bokeh.io.save(lay)
 # %%

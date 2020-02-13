@@ -13,7 +13,7 @@ from bokeh.models.widgets import Select, Slider, RadioButtonGroup, Button
 from bokeh.embed import components
 phd.viz.bokeh_theme()
 colors, palette = phd.viz.phd_style()
-bokeh.plotting.output_file("../assets/fixed_wt_model_explorer.html")
+bokeh.plotting.output_file("../figs/fixed_wt_model_explorer.html", mode='inline')
 
 
 # Define parameter ranges
@@ -42,50 +42,45 @@ source = ColumnDataSource(data=dict(c=c_range, c_Ka=np.log(c_range/ref_Ka), ref_
 view = CDSView(source=source, filters=[IndexFilter(subsamp)])
 
 # Instantiate the figure canvas
-p_fc = bokeh.plotting.figure(width=250, height=200,
+p_fc = bokeh.plotting.figure(width=500, height=300,
                             x_axis_label='log [c / Ka (reference)]', y_axis_label='fold-change',
-                            title='INDUCTION PROFILE', x_range=[-6, 5],
+                            title='induction profile', x_range=[-6, 5],
                             y_range=[-0.1, 1.1])
 
-p_bohr = bokeh.plotting.figure(width=250, height=200,
+p_bohr = bokeh.plotting.figure(width=500, height=300,
                                 x_axis_label='free energy [kT]', 
                                 y_axis_label='fold-change',
                                 x_range=[-15, 15], y_range=[-0.1, 1.1],
-                                title='PHENOTYPIC DATA COLLAPSE')
-p_delBohr = bokeh.plotting.figure(width=250, height=200,
+                                title='energetic representation')
+p_delBohr = bokeh.plotting.figure(width=500, height=300,
                                   x_axis_label='log [c / Ka (reference)]', y_axis_label='∆F [kT]',
                                   y_range=[-15, 15],
-                                  title='SHIFT IN FREE ENERGY')
-
-for p in [p_fc, p_bohr, p_delBohr]:
-    p.axis.axis_label_text_font_size = "1em"
-    p.title.text_font_size = "1em"
-    p.axis.major_label_text_font_size = "0.75em"
+                                  title='shift in free energy')
 
 # Plot fold-change values
-p_fc.line(x='c_Ka', y='ref_fc', source=source, color=colors['black'], line_width=1.5)
-p_fc.line(x='c_Ka', y='mut_fc', source=source, color=colors['blue'], line_width=1.5)
+p_fc.line(x='c_Ka', y='ref_fc', source=source, color=colors['black'], line_width=2)
+p_fc.line(x='c_Ka', y='mut_fc', source=source, color=colors['green'], line_width=2)
 p_fc.circle(x='c_Ka', y='mut_fc', source=source, view=view,
-            color=colors['blue'], line_width=1.5, size=9, 
-            line_color=colors['black'])
+            color='white', line_width=2, size=10, 
+            line_color=colors['green'])
 
 # Plot the data collapse
 p_bohr.line(bohr_range, (1 + np.exp(-bohr_range))**-1, color='black', 
-            line_width=1)
+            line_width=2)
 p_bohr.circle(x='mut_bohr', y='mut_fc', source=source, view=view,
-            color=colors['blue'], line_color=colors['black'], size=9, 
-            line_width=1.5)
+            color='white', line_color=colors['green'], size=10, 
+            line_width=2)
 
 
 
 # Pot the delta bohr
 dbohr_ref = bokeh.models.Span(location=0, dimension='width', line_color='black',
                                line_width=1)
-p_delBohr.line(x='c_Ka', y='mut_delta_bohr', source=source, color=colors['blue'], 
-            line_width=1)
+p_delBohr.line(x='c_Ka', y='mut_delta_bohr', source=source, color=colors['green'], 
+            line_width=2)
 p_delBohr.circle(x='c_Ka' , y='mut_delta_bohr', view=view, source=source,
-                color=colors['blue'],  size=9, 
-                line_color=colors['black'])
+                color='white',  size=10, 
+                line_color=colors['green'], line_width=2)
 dbohr_ref = bokeh.models.Span(location=0, dimension='width', line_color='black',
                                line_width=1)
 p_delBohr.renderers.extend([dbohr_ref])
@@ -105,19 +100,19 @@ p_delBohr.renderers.extend([dbohr_ref])
 # Mutant controls
 mut_epRA_slider = Slider(start=-10, end=10, value=0, step=0.1,
 title='difference in DNA binding energy [kT]', 
-         bar_color=colors['light_blue'])
+         bar_color=colors['light_orange'])
 mut_R_slider = Slider(start=-299, end=1500, value=260, step=1,
  title='difference in repressor expression [rep. per cell]', 
-        bar_color=colors['light_blue'])
+        bar_color=colors['light_red'])
 mut_ka_slider = Slider(start=np.log(0.1), end=4, value=0, step=0.01,
-    title='log relative change in Ka', bar_color=colors['light_blue'])
+    title='log relative change in Ka', bar_color=colors['light_purple'])
 
 mut_ki_slider = Slider(start=-3, end=3, value=0, step=0.01,
-    title='log relative change in Ki', bar_color=colors['light_blue'])
+    title='log relative change in Ki', bar_color=colors['light_purple'])
             
 mut_epAI_slider = Slider(start=-5, end=5, value=0, step=0.1,
     title='difference in allosteric state energy [kT]', 
-    bar_color=colors['light_blue'])
+    bar_color=colors['light_purple'])
 
     
 callback_args = {'source':source,
@@ -205,18 +200,31 @@ mut_reset = Button(label='double-click to reset set mutant to wild type', callba
 mut_reset.js_on_click(callback)
 
 # Assemble controls
-mut_controls = [mut_reset, mut_R_slider,  mut_epRA_slider, mut_ka_slider, mut_ki_slider,
+mut_controls = [mut_reset, mut_R_slider,  mut_epRA_slider, mut_epAI_slider, mut_ka_slider, mut_ki_slider,
                 mut_epAI_slider]
 
 for  mc in mut_controls[1:]:
     mc.callback = callback
 
-mut_inputs = widgetbox(mut_controls, sizing_mode="scale_width")
-layout = bokeh.layouts.layout([[mut_reset], 
-                               [mut_epRA_slider, mut_R_slider],
-                               [mut_ka_slider, mut_ki_slider],
-                               [p_fc, p_bohr, p_delBohr]],
-                               sizing_mode="scale_both")
+
+header = Div(text="""
+<h1 style="font-family:NanumMyeongjo; width: 1000px; font-size:2.5em;border-bottom: 1px solid #3c3c3c; text-align: left;">
+The profile of the free energy difference is parameter dependent</h1>
+<br/>
+<center>
+<img src="delF_annotated.png" style="margin-left: 0%; width: 600px; padding-bottom: 15%;"
+</center>
+
+"""
+)
+
+box = widgetbox(mut_reset, mut_ka_slider, mut_ki_slider, mut_epAI_slider, mut_R_slider, mut_epRA_slider,
+width=500, height=300)
+row1 = bokeh.layouts.row(box, p_fc)
+row2 = bokeh.layouts.row(p_bohr, p_delBohr)
+layout = bokeh.layouts.column(header, row1, row2)
+
+                               
 bokeh.io.save(layout)
 
 

@@ -11,6 +11,7 @@ hv.extension('bokeh')
 _ = phd.viz.altair_theme()
 colors, palette = phd.viz.bokeh_theme()
 DATA_DIR = '../../../data'
+
 # %%
 # Load the sampler information
 with open(f'{DATA_DIR}/SI_I_O2_R260.pkl', 'rb') as f:
@@ -53,12 +54,12 @@ rep_colors = {22: colors['light_red'],
               260: colors['light_orange'], 
               1220: colors['light_purple'], 
               1740: colors['light_blue']} 
-edge_colors = {22: colors['dark_red'], 
-              60: colors['dark_brown'],  
-              124: colors['dark_green'], 
-              260: colors['dark_orange'], 
-              1220: colors['dark_purple'], 
-              1740: colors['dark_blue']} 
+edge_colors = {22: colors['red'], 
+              60: colors['brown'],  
+              124: colors['green'], 
+              260: colors['orange'], 
+              1220: colors['purple'], 
+              1740: colors['blue']} 
 
 # Define the operators and their respective energies
 operators = ['O1', 'O2', 'O3']
@@ -90,6 +91,129 @@ for op, op_en in energies.items():
 
 
 #%%
+#%% Set up the plot base for the fit strain. . 
+fit_base = alt.Chart(fit_strain[fit_strain['IPTGuM'] > 0], width=150, height=150)
+
+points = fit_base.mark_point(size=20).encode(
+                        x='IPTGuM:Q',
+                        y ='fc_mean:Q',
+                        fill=alt.value(colors['light_orange']),
+                        stroke=alt.value(colors['orange']),       
+                        strokeWidth=alt.value(1))
+
+errs = fit_base.mark_errorbar().encode(
+            x=alt.X('IPTGuM:Q', axis=alt.Axis(tickCount=4),  
+                        scale={'type':'log', 'domain':[1E-2, 1E4]}), 
+            y=alt.Y('fc_min:Q', axis={'title':'fold-change in gene expression'}),
+            y2='fc_max:Q',
+            color=alt.value(colors['dark_orange'])
+    ).properties(title='operator O2')
+
+fit_plot = errs + points
+fit_plot.save('../figs/induction_data_only.png', scale_factor=2)
+fit_plot
+
+#%%
+fit_base = alt.Chart(fit_strain[fit_strain['IPTGuM'] > 0], width=150, height=150)
+
+points = fit_base.mark_point(size=20).encode(
+                        x='IPTGuM:Q',
+                        y ='fc_mean:Q',
+                        fill=alt.value(colors['light_orange']),
+                        stroke=alt.value(colors['orange']),       
+                        strokeWidth=alt.value(1))
+
+errs = fit_base.mark_errorbar().encode(
+            x=alt.X('IPTGuM:Q', axis=alt.Axis(tickCount=4),  
+                        scale={'type':'log', 'domain':[1E-2, 1E4]}), 
+            y=alt.Y('fc_min:Q', axis={'title':'fold-change in gene expression'}),
+            y2='fc_max:Q',
+            color=alt.value(colors['dark_orange'])
+    ).properties(title='operator O2')
+
+errorband = alt.Chart(fc_df[(fc_df['repressors']==260) & 
+        (fc_df['operator']=='O2')]).mark_area(opacity=0.45).encode(
+        x=alt.X('IPTGuM:Q', 
+                axis=alt.Axis(title='IPTG concentration [µM]', tickCount=4),
+                scale=alt.Scale(type='log')),
+        y=alt.Y('fc_min:Q',
+                axis=alt.Axis(title='fold-change in gene expression'),
+                scale=alt.Scale(domain=[-0.01, 1.15])),
+        y2='fc_max:Q',
+        fill=alt.Color('repressors:O', 
+                        scale=alt.Scale(range=[colors['light_orange']]),
+                        legend=alt.Legend(title='repressors per cell')),
+        strokeWidth = alt.value(0.5),
+        stroke = alt.Color('repressors:O',
+                          scale=alt.Scale(range=[colors['orange']]))
+
+       ).properties(title='operator O2')
+       
+fit_plot = errorband + errs + points
+fit_plot.save('../figs/induction_data_fit_only.png', scale_factor=2)
+fit_plot
+#%%
+# ############################################################################## 
+# FIT STRAIN ONLY
+# ##############################################################################
+
+#%% Set up the plot base for the fit strain. . 
+fit_base = alt.Chart(fit_strain[fit_strain['IPTGuM'] > 0], width=150, height=150)
+
+points = fit_base.mark_point(size=20).encode(
+                        x = 'IPTGuM:Q',
+                        y = alt.Y('fc_mean:Q', axis=alt.Axis(title='fold-change in gene expression')),
+                        fill=alt.value(colors['light_orange']),
+                        stroke=alt.value(colors['orange']),
+                        strokeWidth=alt.value(1)
+                    )
+
+errs = fit_base.mark_errorbar().encode(
+            x=alt.X('IPTGuM:Q', scale={'type':'log'}),
+            y=alt.Y('fc_min:Q', axis={'title':'fold-change in gene expression'}),
+            y2='fc_max:Q',
+            fill=alt.Color('repressors:O', 
+            scale=alt.Scale(range=(list(rep_colors.values()))), legend=None),
+            stroke= alt.Color('repressors:O', 
+            scale=alt.Scale(range=(list(edge_colors.values()))), legend=None),
+
+    )
+
+fit_plot = errs + points
+
+
+row = alt.hconcat()
+for g, d in fc_df.groupby('operator'):
+    plot_base = alt.Chart(d, width=150, height=150)
+    error_band = plot_base.mark_area(opacity=0.45).encode(
+        x=alt.X('IPTGuM:Q', 
+                axis=alt.Axis(title='IPTG concentration [µM]', tickCount=4),
+                scale=alt.Scale(type='log')),
+        y=alt.Y('fc_min:Q',
+                axis=alt.Axis(title='fold-change in gene expression'),
+                scale=alt.Scale(domain=[-0.01, 1.15])),
+        y2='fc_max:Q',
+        fill=alt.Color('repressors:O', 
+                        scale=alt.Scale(range=list(edge_colors.values())),
+                        legend=alt.Legend(title='repressors per cell')),
+        strokeWidth = alt.value(0.5),
+        stroke = alt.Color('repressors:O',
+                          scale=alt.Scale(range=list(edge_colors.values())))
+
+       ).properties(
+           title=f'operator {g}'
+       )
+    if g == 'O2':
+        plot = error_band + fit_plot
+        plot.save('../figs/induction_fit_only.png', scale_factor=2.0)
+5
+# ############################################################################## 
+# FIT STRAIN ONLY
+# ##############################################################################
+#%%
+
+
+#%%
 
 # ############################################################################## 
 # FIT STRAIN ONLY
@@ -102,8 +226,8 @@ points = fit_base.mark_point(size=20).encode(
                         x = 'IPTGuM:Q',
                         y = alt.Y('fc_mean:Q', axis=alt.Axis(title='fold-change in gene expression')),
                         fill=alt.value(colors['light_orange']),
-                        stroke=alt.value(colors['dark_orange']),
-                        strokeWidth=alt.value(0.5)
+                        stroke=alt.value(colors['orange']),
+                        strokeWidth=alt.value(1)
                     )
 
 errs = fit_base.mark_errorbar().encode(
@@ -141,8 +265,8 @@ for g, d in fc_df.groupby('operator'):
         error_band += fit_plot
     row |= error_band
 
-row
-row.save('../assets/induction_fitstrain.svg')
+
+row.save('../assets/induction_fitstrain.png', scale_factor=2.0)
 
 #%%
 # ##############################################################################
@@ -182,7 +306,7 @@ for g, d in fc_df.groupby('operator'):
                 legend=None),
         stroke = alt.Color('repressors:O',
                           scale=alt.Scale(range=list(edge_colors.values()))),
-        strokeWidth=alt.value(0.5)
+        strokeWidth=alt.value(1)
         )
     errs = base.mark_errorbar().encode(
             x='IPTGuM',
@@ -195,49 +319,7 @@ for g, d in fc_df.groupby('operator'):
 
 
 row
-row.save('../assets/induction_allstrain.svg')
-
-
-
-# %%
-# Bokeh implementation:
-plots = []
-bokeh.io.output_file('../assets/induction_fitstrain.html')
-for g, d in fc_df.groupby('operator'):
-    p = bokeh.plotting.figure(width=150, height=150, sizing_mode='scale_both',
-                              x_axis_type='log', x_axis_label = 'IPTG [µM]',
-                              y_axis_label='fold-change',
-                              title=f'operator {g}',
-                              x_range=[1E-2, 1E4],
-                              toolbar_location=None)
-    for r, _d in d.groupby('repressors'):
-        p.varea(x='IPTGuM', y1='fc_min', y2='fc_max',
-                        source=_d, fill_color=rep_colors[r], color=colors['black'],
-                        legend_label=str(int(r)))
-        p.line(x='IPTGuM', y='fc_min',
-                        source=_d,  color=rep_colors[r],
-                        line_width=0.75)
-        p.line(x='IPTGuM', y='fc_max',
-                        source=_d, color=rep_colors[r],
-                        line_width=0.75)
-        if (g == 'O2') & (r == 260):
-            p.circle(x='IPTGuM', y='mean', fill_color='white', 
-                    color=colors['dark_orange'], source=fit_strain, size=8)
-    plots.append(p)
-plots[0].legend.location = 'top_left'
-plots[0].legend.title = 'repressors per cell'
-plots[1].legend.visible = False
-plots[2].legend.visible = False
-plots[0].legend.label_text_font_size = "0.75em"
-plots[0].legend.title_text_font_size = "0.75em"
-for p in plots:
-    p.axis.axis_label_text_font_size = "1em"
-    p.title.text_font_size = "1em"
-    p.axis.major_label_text_font_size = "0.75em"
-
-lay = bokeh.layouts.gridplot([plots], sizing_mode='scale_both')
-bokeh.io.save(lay)
-
+row.save('../figs/induction_allstrain.png', scale_factor=2)
 
 
 # %%

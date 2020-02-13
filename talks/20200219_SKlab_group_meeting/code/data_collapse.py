@@ -71,14 +71,17 @@ points = base.mark_point().encode(
 bohr_range = np.linspace(-10, 10, 200)
 fc = (1 + np.exp(-bohr_range))**-1
 _df = pd.DataFrame({'bohr':bohr_range, 'fc':fc})
-curve = alt.Chart(_df).mark_line().encode(
-        x='bohr:Q',
-        y=alt.Y('fc:Q', axis={'title':'fold-change'}),
+curve = alt.Chart(_df, width=300, height=250).mark_line().encode(
+        x=alt.X('bohr:Q', axis={'title':'free energy [kT]'}),
+        y=alt.Y('fc:Q', axis={'title':'fold-change'},
+                 scale={'domain':[-0.01, 1.15]}),
         strokeWidth=alt.value(2)
         )
-agg = points + errors + curve
 
-agg.save('../assets/data_collapse.svg')
+
+agg = points + errors + curve
+agg.save('../figs/data_collapse.png', scale_factor=3.0)
+curve.save('../figs/data_collapse_curve.png', scale_factor=3.0)
 
 # %%
 
