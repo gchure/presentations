@@ -105,28 +105,33 @@ delF_source = ColumnDataSource({'rep_range':rep_range,
                                  'delF_ep':ep_range - ref_ep_slider.value})
 
 # Set up the figure canvas
-plot_width = 300
-plot_height = 300
-p_fc = bokeh.plotting.figure(width=300, height=300, 
+plot_width = 375
+plot_height = 325
+p_fc = bokeh.plotting.figure(width=plot_width, height=plot_height, 
                              x_axis_label='log\u2081\u2080 (c / Ki)',
                              y_axis_label = 'fold-change',
-                             y_range=[-0.01, 1.1])
+                             y_range=[-0.01, 1.1],
+                             toolbar_location=None)
 
-p_bohr = bokeh.plotting.figure(width=300, height=300, 
+p_bohr = bokeh.plotting.figure(width=plot_width, height=plot_height, 
                              x_axis_label='free energy [kT]',
-                             y_axis_label = 'fold-change')
+                             y_axis_label = 'fold-change',
+                             toolbar_location=None)
 
 p_dF_rep = bokeh.plotting.figure(width=plot_width, height=plot_height, 
                              x_axis_label='log\u2081\u2080 (R/R_ref)',
-                             y_axis_label = 'free energy shift [kT]')
+                             y_axis_label = 'free energy shift [kT]',
+                             toolbar_location=None)
 
 p_dF_c = bokeh.plotting.figure(width=plot_width, height=plot_height, 
                              x_axis_label='log\u2081\u2080(c/ c_ref)',
-                             y_axis_label = 'free energy shift [kT]')
+                             y_axis_label = 'free energy shift [kT]',
+                             toolbar_location=None)
 
 p_dF_ep = bokeh.plotting.figure(width=plot_width, height=plot_height, 
                              x_axis_label='∆ε - Δε_ref [kT]',
-                             y_axis_label = 'free energy shift [kT]')
+                             y_axis_label='free energy shift [kT]',
+                             toolbar_location=None)
 
 # Invariant master curve
 bohr_range = np.linspace(-15, 15,  n_points)
@@ -251,13 +256,23 @@ for s in [ref_c_slider, ref_rep_slider, ref_ep_slider,
     s.callback = cb
     s.js_on_change('value', cb)
 
+
+# Set up things to mimic the slide
+header = Div(text="""
+<h1 style="font-family:NanumMyeongjo; font-size: 2.5em; 
+border-bottom: 1px solid #3c3c3c; width:100%; text-align: left"> Relative changes in parameter values can be mapped to shifts in free energy </h1> 
+<br/>
+<img src="delF_ref_annotated.png" style="width: 90%; margin-left: 5%; padding-bottom: 10%;">
+""")
+
+
 # Set up the layout
 ref_box = widgetbox(ref_c_slider, ref_rep_slider, ref_ep_slider, width=int(plot_width))
 box = widgetbox(c_slider, rep_slider, ep_slider, width=int(plot_width))
 col = bokeh.layouts.column(ref_box, box)
 row1 = bokeh.layouts.row(col, p_fc, p_bohr)
 row2 = bokeh.layouts.row(p_dF_c, p_dF_rep, p_dF_ep)
-lay = bokeh.layouts.column(row1, row2)
+lay = bokeh.layouts.column(header, row1, row2)
 bokeh.io.save(lay)
 
 
